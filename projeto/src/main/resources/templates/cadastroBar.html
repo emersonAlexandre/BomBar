@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="'layout/layout_default'">
+
+<head>
+<title th:text="${bar.novo ? 'Cadastro' : 'Atualização'}"></title>
+</head>
+<body>
+
+	<section layout:fragment="content">
+
+		<div class="page-header">
+			<div class="container-fluid">
+				<h1 th:text="${bar.novo ? 'Cadastro de bar' : 'Atualização de bar'}"></h1>
+			</div>
+		</div>
+
+		<form id="form-bar" method="POST"
+			class="form-vertical  js-form-loading" th:object="${bar}"
+			th:action="${bar.novo} ? @{/bares/novo} : @{/bares/{id}(id=${bar.id})}">
+
+			<input type="hidden" th:field="*{id}" />
+			
+			<div class="container-fluid">
+
+				<div class="alert alert-dismissible fade in"
+					th:if="${!#strings.isEmpty(mensagem)}"
+					th:classappend="${#strings.containsIgnoreCase(mensagem, 'erro') ? 'alert-danger' : 'alert-success'}">
+					<a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong th:text="${#strings.replace(mensagem, 'Erro! ', '')}"></strong>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Informações gerais</h3>
+					</div>
+
+					<div class="panel-body">
+
+						<div class="row">
+							<div class="col-sm-4 form-group js-validate"
+								th:classappend="${#fields.hasErrors('nome')} ? has-error">
+								<label class="control-label" for="nome">Nome:</label> <input
+									id="nome" th:field="*{nome}" class="form-control" name="nome"
+									type="text" /> <span th:if="${#fields.hasErrors('nome')}"
+									class="help-block">Campo obrigatório</span>
+							</div>
+
+							<div class="col-sm-3 form-group js-validate"
+								th:classappend="${#fields.hasErrors('cnpj')} ? 'has-error'">
+								<label class="control-label" for="cnpj">CNPJ:</label> <input
+									id="cnpj" th:field="*{cnpj}" class="form-control js-cnpj"
+									name="cnpj" type="text" /> <span
+									th:if="${#fields.hasErrors('cnpj')}" class="help-block">O
+									CNPJ deve ser informado corretamente</span>
+							</div>
+
+							<div class="col-sm-4 js-validate"
+								th:classappend="${#fields.hasErrors('contato')} ? 'has-error'">
+								<label class="control-label" for="contato">Contato:</label> <input
+									id="contato" class="form-control js-number-phoneandcell"
+									name="contato" type="text" th:field="*{contato}" /><span
+									th:if="${#fields.hasErrors('contato')}" class="help-block">Campo
+									obrigatório</span>
+							</div>
+
+						</div>
+
+						<div class="form-group row">
+							<div class="col-sm-4 js-validate"
+								th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+								<label class="control-label" for="email">E-mail:</label> <input
+									id="email" class="form-control" name="email" type="text"
+									th:field="*{email}" /><span
+									th:if="${#fields.hasErrors('email')}" class="help-block">O
+									e-mail deve ser informado corretamente</span>
+							</div>
+
+							<div class="col-sm-3 form-group"
+								th:classappend="${#fields.hasErrors('tipoDeComida')} ? 'has-error'">
+								<label class="control-label" for="tipoDeComida">Tipo de
+									comida:</label> <select id="tipoDeComida" class="form-control"
+									name="tipoDeComida" th:field="*{tipoDeComida}">
+									<option value="">Selecione</option>
+									<option th:each="tpC : ${tiposComida}" th:value="${tpC}"
+										th:text="${tpC.descricao}"></option>
+								</select> <span th:if="${#fields.hasErrors('tipoDeComida')}"
+									class="help-block">Campo obrigatório</span>
+							</div>
+
+							<div class="col-sm-4 form-group"
+								th:classappend="${#fields.hasErrors('tipoDeMusica')} ? 'has-error'">
+								<label class="control-label" for="tipoDeMusica">Tipo de
+									música:</label> <select id="tipoDeMusica" class="form-control"
+									name="tipoDeMusica" th:field="*{tipoDeMusica}">
+									<option value="">Selecione</option>
+									<option th:each="tpM : ${tiposMusica}" th:value="${tpM}"
+										th:text="${tpM.descricao}"></option>
+								</select> <span th:if="${#fields.hasErrors('tipoDeMusica')}"
+									class="help-block">Campo obrigatório</span>
+							</div>
+
+						</div>
+
+						<div class="form-group row">
+
+							<div class="col-sm-4 form-group js-validate" th:classappend="${#fields.hasErrors('temCover')} ? 'has-error'">
+								<label class="control-label" for="optradio">Tem cover?</label> 
+								<label class="radio-inline"><input type="radio" name="temCover" value="true" th:field="*{temCover}"/><span th:if="${#fields.hasErrors('temCover')}"
+									class="help-block">Campo obrigatório</span>Sim</label>
+								<label class="radio-inline"><input type="radio" name="temCover" value="false" th:field="*{temCover}"/><span th:if="${#fields.hasErrors('temCover')}"
+									class="help-block">Campo obrigatório</span>Não</label>
+							</div>
+
+							<div class="col-sm-3 form-group js-validate" th:classappend="${#fields.hasErrors('coverPago')} ? 'has-error'">
+								<label class="control-label" for="optradio">É pago?</label> 
+								<label class="radio-inline"><input type="radio" name="coverPago" value="true" th:field="*{coverPago}"/><span th:if="${#fields.hasErrors('coverPago')}"
+									class="help-block">Campo obrigatório</span>Sim</label>
+								<label class="radio-inline"><input type="radio" name="coverPago" value="false" th:field="*{coverPago}"/><span th:if="${#fields.hasErrors('coverPago')}"
+									class="help-block">Campo obrigatório</span>Não</label>
+							</div>
+						
+							<div class="col-sm-5">
+								<div class="form-group">
+									<label for="input-horario" class="control-label">Horario
+										de funcionamento:</label>
+									<div id="input-horario" class="form-inline">
+										<div class='input-group date'
+											th:classappend="${#fields.hasErrors('horarioInicial')} ? has-error">
+											<input id="horarioInicial" class="form-control js-hour"
+												name="horarioInicial" type="text"
+												th:field="*{horarioInicial}" /><span
+												th:if="${#fields.hasErrors('horarioInicial')}"
+												class="help-block">Campo obrigatório</span>
+										</div>
+										<label class="aw-form-label-between">até</label>
+										<div class='input-group date'
+											th:classappend="${#fields.hasErrors('horarioFinal')} ? has-error">
+											<input id="horarioFinal" class="form-control js-hour"
+												name="horarioFinal" type="text" th:field="*{horarioFinal}" /><span
+												th:if="${#fields.hasErrors('horarioFinal')}"
+												class="help-block">Campo obrigatório</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						
+						</div>
+						
+						<div class="form-group row">
+
+							<div class="col-sm-4 form-group js-validate" th:classappend="${#fields.hasErrors('temEstacionamento')} ? 'has-error'">
+								<label class="control-label" for="temEstacionamento">Tem estacionamento?</label> 
+								<label class="radio-inline"><input type="radio" name="temEstacionamento" value="true" th:field="*{temEstacionamento}"/><span th:if="${#fields.hasErrors('temEstacionamento')}"
+									class="help-block">Campo obrigatório</span>Sim</label>
+								<label class="radio-inline"><input type="radio" name="temEstacionamento" value="false" th:field="*{temEstacionamento}"/><span th:if="${#fields.hasErrors('temEstacionamento')}"
+									class="help-block">Campo obrigatório</span>Não</label>
+							</div>
+
+							<div class="col-sm-3 form-group js-validate" th:classappend="${#fields.hasErrors('estacionamentoPago')} ? 'has-error'">
+								<label class="control-label" for="estacionamentoPago">É pago?</label> 
+								<label class="radio-inline"><input type="radio" name="estacionamentoPago" value="true" th:field="*{estacionamentoPago}"/><span th:if="${#fields.hasErrors('estacionamentoPago')}"
+									class="help-block">Campo obrigatório</span>Sim</label>
+								<label class="radio-inline"><input type="radio" name="estacionamentoPago" value="false" th:field="*{estacionamentoPago}"/><span th:if="${#fields.hasErrors('estacionamentoPago')}"
+									class="help-block">Campo obrigatório</span>Não</label>
+							</div>
+							
+							<div class="col-sm-5">
+								<div class="form-group">
+									<label class="control-label" for="input-horario">Dias
+										de funcionamento:</label>
+									<div id="input-horario" class="form-inline">
+										<div class='input-group date form-group' th:classappend="${#fields.hasErrors('diaInicial')} ? 'has-error'">
+											<select id="diaInicial" class="form-control"
+												name="diaInicial" th:field="*{diaInicial}">
+												<option value="">Selecione</option>
+												<option th:each="diaI : ${diasDaSemana}" th:value="${diaI}"
+													th:text="${diaI.descricao}"></option>
+											</select><span th:if="${#fields.hasErrors('diaInicial')}"
+									class="help-block">Campo obrigatório</span>
+										</div>
+										<label class="aw-form-label-between">a</label>
+										<div class='input-group date form-group' th:classappend="${#fields.hasErrors('diaFinal')} ? 'has-error'">
+											<select id="diaFinal" class="form-control" name="diaFinal"
+												th:field="*{diaFinal}">
+												<option value="">Selecione</option>
+												<option th:each="diaF : ${diasDaSemana}" th:value="${diaF}"
+													th:text="${diaF.descricao}"></option>
+											</select><span th:if="${#fields.hasErrors('diaFinal')}"
+									class="help-block">Campo obrigatório</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Informações de endereço</h3>
+					</div>
+
+					<div class="panel-body">
+
+						<div class="form-group row">
+							<div class="col-sm-4 js-validate form-group" th:classappend="${#fields.hasErrors('endereco.logradouro')} ? 'has-error'">
+								<label for="logradouro" class="control-label">Logradouro:</label> <input id="logradouro"
+									class="form-control" name="logradouro" type="text" th:field="*{endereco.logradouro}"/><span th:if="${#fields.hasErrors('endereco.logradouro')}"
+									class="help-block">Campo obrigatório</span>
+							</div>
+
+							<div class="col-sm-2 js-validate form-group" th:classappend="${#fields.hasErrors('endereco.numero')} ? 'has-error'">
+								<label for="numero" class="control-label">Número:</label> <input id="numero"
+									class="form-control js-number" name="numero" type="text" th:field="*{endereco.numero}"/><span th:if="${#fields.hasErrors('endereco.numero')}"
+									class="help-block">Campo obrigatório</span>
+							</div>
+
+							<div class="col-sm-4 js-validate form-group" th:classappend="${#fields.hasErrors('endereco.bairro')} ? 'has-error'">
+								<label for="bairro" class="control-label">Bairro:</label> <input id="bairro"
+									class="form-control" name="bairro" type="text" th:field="*{endereco.bairro}"/><span th:if="${#fields.hasErrors('endereco.bairro')}"
+									class="help-block">Campo obrigatório</span>
+							</div>
+
+							<div class="col-sm-2 js-validate">
+								<label for="complemento">Complemento:</label> <input
+									id="complemento" class="form-control" name="complemento"
+									type="text" th:field="*{endereco.complemento}"/>
+							</div>
+
+						</div>
+
+						<div class="form-group row">
+
+							<div class="col-sm-4 js-validate form-group" th:classappend="${#fields.hasErrors('endereco.estado')} ? 'has-error'">
+								<label for="estado" class="control-label">Estado:</label> <select id="estado"
+									class="form-control" name="estado" th:field="*{endereco.estado}">
+									<option id="opInicial" value="">Selecione</option>
+									<option th:each="uf : ${estados}" th:value="${uf.id}"
+													th:text="${uf.nome}"></option>
+								</select><span th:if="${#fields.hasErrors('endereco.estado')}"
+									class="help-block">Campo obrigatório</span>
+							</div>
+
+							<div class="col-sm-4 js-validate form-group" th:classappend="${#fields.hasErrors('endereco.cidade')} ? 'has-error'">
+								<label for="cidade" class="control-label">Cidade:</label> <select id="cidade"
+									class="form-control" name="cidade" th:field="*{endereco.cidade}">
+									<option value="">Selecione</option>
+									<option th:each="city : ${cidades}" th:value="${city.id}"
+													th:text="${city.nome}"></option>
+								</select><span th:if="${#fields.hasErrors('endereco.cidade')}"
+									class="help-block">Campo obrigatório</span>
+							</div>
+
+							<div class="col-sm-4 js-validate">
+								<label for="cep">Cep:</label> <input id="cep"
+									class="form-control js-cep" name="cep" type="text" th:field="*{endereco.cep}"/>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group container-fluid">
+				<button class="btn  btn-success" type="submit" th:text="${bar.novo ? 'Salvar' : 'Atualizar'}"></button>
+				<a id="deletebar" class="btn btn-danger" th:if="${!bar.novo}">Remover</a>
+				<a href="/bares" class="btn  btn-primary">Cancelar</a>
+			</div>
+
+		</form>
+
+		<form id="form-delete" th:action="@{/bares/{id}(id=${bar.id})}"
+			method="POST">
+			<input type="hidden" name="_method" value="DELETE" />
+		</form>
+
+	</section>
+
+	<th:block layout:fragment="js-extra">
+		<script th:src="@{/js/bar/bar.js}"></script>
+	</th:block>
+
+</body>
+</html>
