@@ -1,0 +1,32 @@
+USE projeto;
+
+CREATE TABLE `endereco` (
+	`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+	`logradouro` VARCHAR(50) NOT NULL,
+	`numero` int(20) NOT NULL,
+  	`complemento` VARCHAR(50),
+	`bairro` VARCHAR(50) NOT NULL,
+	`cidade` VARCHAR(50) NOT NULL,
+	`estado` VARCHAR(50) NOT NULL,
+	`cep` VARCHAR(9)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `bar` (
+	`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+	`nome` VARCHAR(50) NOT NULL,
+	`cnpj` VARCHAR(18) NOT NULL,
+	`contato` VARCHAR(15) NOT NULL,
+	`email` VARCHAR(50),
+	`dia_inicial` VARCHAR(13) NOT NULL,
+	`dia_final` VARCHAR(13) NOT NULL,
+	`horario_inicial` VARCHAR(5) NOT NULL,
+	`horario_final` VARCHAR(5) NOT NULL,
+	`tipo_musica` VARCHAR(50) DEFAULT NULL,
+  	`tipo_comida` VARCHAR(50) DEFAULT NULL,
+  	`tem_estacionamento` BOOLEAN NOT NULL,
+	`estacionamento_pago` BOOLEAN NOT NULL,
+	`tem_cover` BOOLEAN NOT NULL,
+	`cover_pago` BOOLEAN NOT NULL,
+  	`id_endereco` BIGINT(20) NOT NULL,
+	FOREIGN KEY (id_endereco) REFERENCES endereco(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
