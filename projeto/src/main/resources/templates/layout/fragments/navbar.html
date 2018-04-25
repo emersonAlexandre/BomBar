@@ -19,9 +19,12 @@
 				</ul>
 			</div>
 
-			<!-- <ul class="nav navbar-nav  navbar-right">
-				<li><a href="#"><em class="fa  fa-sign-out"></em></a></li>
-			</ul> -->
+			<ul class="nav navbar-nav  navbar-right">
+				<li><a href="#" onclick="document.getElementById('form-logout').submit()"><em class="fa  fa-sign-out"></em></a></li>
+			</ul>
+			<form action="/logout" method="post" class="navbar-form navbar-right" id="form-logout">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			</form>
 
 		</div>
 	</nav>

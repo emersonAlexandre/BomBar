@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="icon" th:href="@{/images/beer.png}" />
+<title>BomBar</title>
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/vendors.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/algaworks.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/application.css}" />
+
+</head>
+<body class="aw-layout-simple-page" style="background-color: #000000;">
+
+	<div class="aw-layout-simple-page__container">
+
+		<form action="/entrar" method="POST">
+			<div class="aw-simple-panel">
+				<img src="/images/logo.png" />
+
+				<div class="aw-simple-panel__message">Por favor, faça o login.
+				</div>
+
+				<div class="aw-simple-panel__box">
+					<div th:if="${param.error}">
+						<div class="alert alert-danger">Usuário e/ou inválidos!</div>
+					</div>
+
+					<div th:if="${param.logout}">
+						<div class="alert alert-info">Até logo!</div>
+					</div>
+					<div class="form-group  has-feedback">
+						<input type="text" class="form-control  input-lg"
+							placeholder="Seu e-mail" name="username" /> <span
+							class="form-control-feedback"
+							aria-hidden="true"></span>
+					</div>
+
+					<div class="form-group  has-feedback">
+						<input type="password" class="form-control  input-lg"
+							placeholder="Sua senha" name="password" /> <span
+							class="form-control-feedback"
+							aria-hidden="true"></span>
+					</div>
+					<div class="form-group">
+						<button	class="btn  btn-primary  btn-lg  aw-btn-full-width">Entrar</button>
+					</div>
+
+					<div class="form-group clearfix">
+						<div class="form-check pull-left aw-checkbox-no-margin">
+							<input type="checkbox" id="remember-me" class="form-check-input"/> <label
+								for="remember-me" class="form-check-label">Lembre de mim</label>
+						</div>
+
+						<div class="pull-right">
+							<a href="#">Esqueceu a senha?</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="aw-simple-panel__footer">
+					Novo por aqui? <a href="#">Cadastre-se</a>.
+				</div>
+			</div>
+			<input type="hidden" th:name="${_csrf.parameterName}"
+				th:value="${_csrf.token}" />
+		</form>
+
+	</div>
+	<script th:src="@{/js/template/vendors.js}"></script>
+	<script th:src="@{/js/template/bombar.js}"></script>
+</body>
+</html>

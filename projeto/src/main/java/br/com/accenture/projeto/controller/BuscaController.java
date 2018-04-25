@@ -20,7 +20,7 @@ import br.com.accenture.projeto.service.BarService;
 import br.com.accenture.projeto.util.Localizacao;
 
 @Controller
-@RequestMapping("/buscaBares")
+@RequestMapping("/")
 public class BuscaController {
 
 	@Autowired

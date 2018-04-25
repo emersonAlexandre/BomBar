@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
@@ -27,6 +28,20 @@ import br.com.accenture.projeto.model.Estado;
 public class Localizacao implements Serializable {
 
 	private static final long serialVersionUID = 4309798536454874L;
+	
+	@Autowired
+	Gson gson;
+	
+	public JsonArray getArrayJson(String caminho) {
+		BufferedReader reader = null;
+		ClassLoader cl = this.getClass().getClassLoader();
+		InputStreamReader isr = new InputStreamReader(cl.getResourceAsStream(caminho));
+
+		reader = new BufferedReader(isr);
+
+		JsonParser parser = new JsonParser();
+		return parser.parse(reader).getAsJsonArray();
+	}
 
 	/**
 	 * Método responsável por ler o arquivo Cidades.json, convertê-lo em uma lista de objetos do tipo Cidade, e em seguida retornará uma lista de cidades de acordo com o codigo do estado passado por parâmetro
@@ -35,18 +50,7 @@ public class Localizacao implements Serializable {
 	 */
 	public List<Cidade> buscarCidadesPorCodigoDoEstado(String codigo) {
 
-		Gson gson = new Gson();
-		BufferedReader readerCidades = null;
-		ClassLoader cl = this.getClass().getClassLoader();
-		InputStreamReader isr = new InputStreamReader(cl.getResourceAsStream("json/Cidades.json"));
-
-		try {
-			readerCidades = new BufferedReader(isr);
-		} catch (Exception e) {
-		}
-
-		JsonParser parser = new JsonParser();
-		JsonArray obj = parser.parse(readerCidades).getAsJsonArray();
+		JsonArray obj = getArrayJson("json/Cidades.json");
 		List<Cidade> cidadesDoEstado = new ArrayList<>();
 		for (JsonElement jsonElement : obj) {
 			Cidade cidade = gson.fromJson(jsonElement, Cidade.class);
@@ -67,18 +71,7 @@ public class Localizacao implements Serializable {
 	 */
 	public List<Estado> buscarEstados() {
 
-		Gson gson = new Gson();
-		BufferedReader readerEstados = null;
-		ClassLoader cl = this.getClass().getClassLoader();
-		InputStreamReader isr = new InputStreamReader(cl.getResourceAsStream("json/Estados.json"));
-
-		try {
-			readerEstados = new BufferedReader(isr);
-		} catch (Exception e) {
-		}
-
-		JsonParser parser = new JsonParser();
-		JsonArray obj = parser.parse(readerEstados).getAsJsonArray();
+		JsonArray obj = getArrayJson("json/Estados.json");
 		List<Estado> estados = new ArrayList<>();
 		for (JsonElement jsonElement : obj) {
 			Estado estado = gson.fromJson(jsonElement, Estado.class);
@@ -97,19 +90,7 @@ public class Localizacao implements Serializable {
 	 */
 	public List<Cidade> buscarCidades() {
 
-		Gson gson = new Gson();
-		BufferedReader readerCidades = null;
-
-		ClassLoader cl = this.getClass().getClassLoader();
-		InputStreamReader isr = new InputStreamReader(cl.getResourceAsStream("json/Cidades.json"));
-
-		try {
-			readerCidades = new BufferedReader(isr);
-		} catch (Exception e) {
-		}
-
-		JsonParser parser = new JsonParser();
-		JsonArray obj = parser.parse(readerCidades).getAsJsonArray();
+		JsonArray obj = getArrayJson("json/Cidades.json");
 		List<Cidade> cidades = new ArrayList<>();
 		for (JsonElement jsonElement : obj) {
 			Cidade cidade = gson.fromJson(jsonElement, Cidade.class);
@@ -129,18 +110,7 @@ public class Localizacao implements Serializable {
 	 */
 	public Estado buscarEstadoPorCodigo(String idEstado) {
 
-		Gson gson = new Gson();
-		BufferedReader readerEstados = null;
-		ClassLoader cl = this.getClass().getClassLoader();
-		InputStreamReader isr = new InputStreamReader(cl.getResourceAsStream("json/Estados.json"));
-
-		try {
-			readerEstados = new BufferedReader(isr);
-		} catch (Exception e) {
-		}
-
-		JsonParser parser = new JsonParser();
-		JsonArray obj = parser.parse(readerEstados).getAsJsonArray();
+		JsonArray obj = getArrayJson("json/Estados.json");
 		for (JsonElement jsonElement : obj) {
 			Estado estado = gson.fromJson(jsonElement, Estado.class);
 			if (estado.getId().equals(idEstado)) {
@@ -161,18 +131,7 @@ public class Localizacao implements Serializable {
 	 */
 	public Cidade buscarCidadePorCodigo(String idCidade) {
 
-		Gson gson = new Gson();
-		BufferedReader readerCidades = null;
-		ClassLoader cl = this.getClass().getClassLoader();
-		InputStreamReader isr = new InputStreamReader(cl.getResourceAsStream("json/Cidades.json"));
-
-		try {
-			readerCidades = new BufferedReader(isr);
-		} catch (Exception e) {
-		}
-
-		JsonParser parser = new JsonParser();
-		JsonArray obj = parser.parse(readerCidades).getAsJsonArray();
+		JsonArray obj = getArrayJson("json/Cidades.json");
 		for (JsonElement jsonElement : obj) {
 			Cidade cidade = gson.fromJson(jsonElement, Cidade.class);
 			if (cidade.getId().equals(idCidade)) {
