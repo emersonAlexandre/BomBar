@@ -17,6 +17,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.
 		authorizeRequests()
+		.antMatchers("/cadastroUsuario").permitAll()
 		.antMatchers("/").hasAnyRole("PG_BUSCA_BARES")
 		.antMatchers("/bares/**").hasAnyRole("PG_BARES")
 		.anyRequest()

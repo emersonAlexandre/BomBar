@@ -37,6 +37,7 @@ create table if not exists usuario (
 	login varchar(50) not null,
 	senha varchar(100) not null,
 	ativo boolean default false,
+	grupo varchar(12) not null,
 	primary key (id),
 	unique key un_usuario_login (login)
 );

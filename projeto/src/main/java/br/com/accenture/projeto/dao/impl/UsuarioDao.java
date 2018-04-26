@@ -20,10 +20,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import br.com.accenture.projeto.dao.IUsuarioDao;
+import br.com.accenture.projeto.enums.Grupo;
 import br.com.accenture.projeto.model.Usuario;
 
 @Component
-public class UsuarioDao implements UserDetailsService{
+public class UsuarioDao implements UserDetailsService, IUsuarioDao{
 
 	private Logger logger = Logger.getLogger(UsuarioDao.class);
 
@@ -31,13 +33,89 @@ public class UsuarioDao implements UserDetailsService{
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
+	public void salvar(Usuario usuario) {
+
+		jdbcTemplate.update(
+				"INSERT INTO usuario (nome, login, senha, ativo, grupo) VALUES (?, ?, ?, ?, ?)",
+				usuario.getNome(), usuario.getUsername(), usuario.getPassword(), usuario.isEnabled(), usuario.getGrupo().toString());
+	}
+
+	@Override
+	public void atualizar(Usuario usuario) {
+
+		jdbcTemplate.update("UPDATE usuario SET nome = ?, login = ?, senha = ?, ativo = ?, grupo = ? WHERE id = ?", usuario.getNome(), usuario.getUsername(), usuario.getPassword(), usuario.isEnabled(), 
+				usuario.getGrupo().toString());
+	}
+
+	@Override
+	public void deletar(Long id) {
+		jdbcTemplate.update("DELETE FROM bar WHERE id = ?", id);		
+	}
+
+	/**
+	 * Método responsável por criar e retornar um objeto do tipo Usuario, a partir de um ResultSet que é passado por parâmetro
+	 */
+	public Usuario montarObjeto(ResultSet rs) throws SQLException {
+		return new Usuario(rs.getLong("id"), rs.getString("nome"), rs.getString("login"), rs.getString("senha"), rs.getBoolean("ativo"), Grupo.valueOf(rs.getString("grupo")));
+	}
+
+	@Override
+	public Usuario buscarPoId(Long id) {
+		try {
+			List<Usuario> usuarios = jdbcTemplate.query("SELECT * FROM usuario WHERE id = "+id, new RowMapper<Usuario>() {
+
+				@Override
+				public Usuario mapRow(ResultSet rs, int rowNumb) throws SQLException {
+					Usuario user = montarObjeto(rs);
+					user.getAuthorities().addAll(buscarPermissoes(user.getUsername(), PERMISSOES_POR_USUARIO));
+					return user;
+				}
+
+			});
+
+			if(!usuarios.isEmpty()) {
+				return usuarios.get(0);
+			}
+
+		} catch (DataAccessException e) {
+			logger.error("Erro ao buscar um usuario em buscarporId()", e);
+
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<Usuario> buscarTodos() {
+
+		try {
+			List<Usuario> usuarios = jdbcTemplate.query("SELECT * FROM usuario", new RowMapper<Usuario>() {
+
+				@Override
+				public Usuario mapRow(ResultSet rs, int rowNumb) throws SQLException {
+					return montarObjeto(rs);
+				}
+
+			});
+
+			return usuarios;
+
+		} catch (DataAccessException e) {
+			logger.error("Erro ao buscar um usuario em buscarTodos()", e);
+
+		}
+
+		return null;
+	}
+
+	@Override
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-		
+
 		Usuario userDetails = new Usuario();
 
 		try {
 			userDetails = buscarUsuario(login);
-			
+
 			Collection<GrantedAuthority> permissoesPorUsuario = buscarPermissoes(login, PERMISSOES_POR_USUARIO);
 
 			userDetails.getAuthorities().addAll(permissoesPorUsuario);
@@ -56,7 +134,7 @@ public class UsuarioDao implements UserDetailsService{
 
 				@Override
 				public Usuario mapRow(ResultSet rs, int rowNumb) throws SQLException {
-					return new Usuario(rs.getString("nome"), login, rs.getString("senha"), rs.getBoolean("ativo"));
+					return new Usuario(rs.getString("nome"), login, rs.getString("senha"), rs.getBoolean("ativo"), Grupo.valueOf(rs.getString("grupo")));
 				}
 
 			});
