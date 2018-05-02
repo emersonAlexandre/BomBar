@@ -1,17 +1,24 @@
 package br.com.accenture.projeto.enums;
 
 public enum Grupo {
-	ADMIN("Adimistrador"),
-	FUNCIONARIO("Funcionário"),
-	CLIENTE("Cliente");
-	
-	private String tipoDeUsuario;
-	
-	private Grupo(String tipoDeUsuario) {
-		this.tipoDeUsuario = tipoDeUsuario;
+	ADMIN(1, "Administrador"),
+	CLIENTE(2, "Cliente"),
+	FUNCIONARIO(3, "Funcionário");
+
+	private final String descricao;
+
+	private final Integer codigo;
+
+	Grupo(Integer codigo, String descricao) {
+		this.codigo = codigo;
+		this.descricao = descricao;
 	}
 
-	public String getTipoDeUsuario() {
-		return tipoDeUsuario;
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public Integer getCodigo() {
+		return codigo;
 	}
 }

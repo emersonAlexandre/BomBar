@@ -38,23 +38,41 @@
 						th:classappend="${#fields.hasErrors('nome')} ? has-error">
 						<input id="nome" type="text" class="form-control  input-lg"
 							placeholder="Seu nome" name="nome" th:field="*{nome}" /> <span
-							th:if="${#fields.hasErrors('nome')}" class="help-block">Campo
-							obrigatório</span>
+							th:if="${#fields.hasErrors('nome')}" class="help-block">Informe seu nome</span>
+					</div>
+					
+					<div class="form-group has-feedback" th:classappend="${#fields.hasErrors('grupo')} ? 'has-error'">
+						<select id="grupo" class="form-control input-lg" name="grupo" th:field="*{grupo}">
+							<option value="">Selecione</option>
+							<option th:each="gp : ${grupo}" th:value="${gp}" th:text="${gp.descricao}"></option>
+						</select><span th:if="${#fields.hasErrors('grupo')}" class="help-block">Informe o seu grupo</span>
 					</div>
 
-					<div class="form-group  has-feedback">
-						<input type="email" class="form-control  input-lg"
-							placeholder="Seu e-mail" name="login" /> <span
-							class="form-control-feedback" aria-hidden="true"></span>
+					<div class="form-group  has-feedback" th:classappend="${#fields.hasErrors('username')} ? has-error">
+						<input id="username" type="email" class="form-control  input-lg"
+							placeholder="Seu e-mail" name="username" th:field="*{username}" /> <span
+							th:if="${#fields.hasErrors('username')}" class="help-block">Informe seu e-mail</span>
 					</div>
 
-					<div class="form-group  has-feedback">
-						<input type="password" class="form-control  input-lg"
-							placeholder="Sua senha" name="senha" /> <span
-							class="form-control-feedback" aria-hidden="true"></span>
+					<div class="form-group  has-feedback" th:classappend="${#fields.hasErrors('password')} ? has-error">
+						<input id="password" type="password" class="form-control  input-lg"
+							placeholder="Sua senha" name="password" th:field="*{password}" /> <span
+							th:if="${#fields.hasErrors('password')}" class="help-block">Informe sua senha</span>
 					</div>
+					
+					<div class="form-group has-feedback row">
+						<div class="col-sm-2">
+							<label style="margin-top: 12px; margin-left: 2px" for="enabled">Ativo?</label>
+						</div>
+  					 	<div class="col-sm-3">
+	  						<label class="switch" style="margin-top: 5px">
+	  							<input id="enabled" type="checkbox" th:checked="${enabled}"/>
+	  							<span class="slider round"></span>
+							</label>
+  						</div>
+					</div>
+					
 					<div class="row">
-
 						<div class="col-sm-6">
 							<a href="/login" class="btn btn-primary btn-lg aw-btn-full-width">Cancelar</a>
 						</div>
@@ -63,9 +81,7 @@
 							<button class="btn btn-success btn-lg aw-btn-full-width">Cadastrar</button>
 						</div>
 					</div>
-
 				</div>
-
 			</div>
 
 			<input type="hidden" th:name="${_csrf.parameterName}"

@@ -55,3 +55,10 @@ create table if not exists usuario_permissao (
 	FOREIGN KEY (usuario_id) REFERENCES usuario(id),
 	FOREIGN KEY (permissao_id) REFERENCES permissao(id)
 );
+
+insert into permissao (id, nome) values 
+	(1, 'PG_BUSCA_BARES'),
+
+	(2, 'PG_BARES')
+
+;

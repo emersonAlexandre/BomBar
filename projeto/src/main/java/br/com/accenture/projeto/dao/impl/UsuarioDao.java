@@ -2,6 +2,9 @@ package br.com.accenture.projeto.dao.impl;
 
 import static br.com.accenture.projeto.util.JdbcUtils.PERMISSOES_POR_USUARIO;
 import static br.com.accenture.projeto.util.JdbcUtils.USUARIO_POR_LOGIN;
+import static br.com.accenture.projeto.util.JdbcUtils.atribuirPermissao;
+import static br.com.accenture.projeto.util.JdbcUtils.PG_BARES;
+import static br.com.accenture.projeto.util.JdbcUtils.PG_BUSCA_BARES;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +21,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import br.com.accenture.projeto.dao.IUsuarioDao;
@@ -34,10 +38,29 @@ public class UsuarioDao implements UserDetailsService, IUsuarioDao{
 
 	@Override
 	public void salvar(Usuario usuario) {
+		
+		System.out.println(usuario.isEnabled());
 
 		jdbcTemplate.update(
 				"INSERT INTO usuario (nome, login, senha, ativo, grupo) VALUES (?, ?, ?, ?, ?)",
-				usuario.getNome(), usuario.getUsername(), usuario.getPassword(), usuario.isEnabled(), usuario.getGrupo().toString());
+				usuario.getNome(), usuario.getUsername(), new BCryptPasswordEncoder().encode(usuario.getPassword()), usuario.isEnabled(), usuario.getGrupo().toString());
+		
+		Usuario user_saved = new Usuario();
+		
+		try {
+			user_saved = buscarUsuario(usuario.getUsername());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(user_saved.getGrupo().equals(Grupo.ADMIN)) {
+			atribuirPermissao(user_saved, PG_BUSCA_BARES, jdbcTemplate);
+			atribuirPermissao(user_saved, PG_BARES, jdbcTemplate);
+		}
+		
+		else {
+			atribuirPermissao(user_saved, PG_BUSCA_BARES, jdbcTemplate);
+		}
 	}
 
 	@Override
@@ -134,7 +157,7 @@ public class UsuarioDao implements UserDetailsService, IUsuarioDao{
 
 				@Override
 				public Usuario mapRow(ResultSet rs, int rowNumb) throws SQLException {
-					return new Usuario(rs.getString("nome"), login, rs.getString("senha"), rs.getBoolean("ativo"), Grupo.valueOf(rs.getString("grupo")));
+					return montarObjeto(rs);
 				}
 
 			});
