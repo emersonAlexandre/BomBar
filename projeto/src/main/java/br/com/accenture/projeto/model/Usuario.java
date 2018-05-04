@@ -22,71 +22,54 @@ public class Usuario implements UserDetails {
 	private String nome;
 	
 	@NotBlank
-	private String username;
+	private String login;
 	
 	@NotBlank
-	private String password;
+	private String senha;
 	
-	private boolean enabled;
+	private boolean ativo;
 	
 	@NotNull
 	private Grupo grupo;
 	
-	private Collection<GrantedAuthority> authorities = new ArrayList<>();
+	private Collection<GrantedAuthority> permissoes = new ArrayList<>();
 
-	public void construtorComum(String nome, String username, 
-			String password, boolean enabled, Grupo grupo) {
+	public void construtorComum(String nome, String login, 
+			String senha, boolean ativo) {
 		this.nome = nome;
-		this.username = username;
-		this.password = password;
-		this.enabled = enabled;
-		this.grupo = grupo;
+		this.login = login;
+		this.senha = senha;
+		this.ativo = ativo;
 	}
 
-	public Usuario(Long id, String nome, String username, 
-			String password, boolean enabled, Grupo grupo) {
+	public Usuario(Long id, String nome, String login, 
+			String senha, boolean ativo) {
 		this.id = id;
-		construtorComum(nome, username, password, enabled, grupo);
+		construtorComum(nome, login, senha, ativo);
 	}
 
-	public Usuario(String nome, String username, 
-			String password, boolean enabled, Grupo grupo) {
-		construtorComum(nome, username, password, enabled, grupo);
+	public Usuario(String nome, String login, 
+			String senha, boolean ativo) {
+		construtorComum(nome, login, senha, ativo);
 	}
 	
 	public Usuario() {
 		
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
-		return authorities;
+		return permissoes;
 	}
 
 	@Override
 	public String getPassword() {
-		return password;
+		return senha;
 	}
 
 	@Override
 	public String getUsername() {
-		return username;
+		return login;
 	}
 
 	@Override
@@ -106,31 +89,61 @@ public class Usuario implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return enabled;
+		return ativo;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+	
+	public String getLogin() {
+		return login;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
 	}
 
 	public Grupo getGrupo() {
 		return grupo;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 
 	public void setGrupo(Grupo grupo) {
 		this.grupo = grupo;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nome=" + nome + ", login=" + login + ", senha=" + senha + ", ativo=" + ativo
+				+ ", grupo=" + grupo + ", permissoes=" + permissoes + "]";
 	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public void setAuthorities(Collection<GrantedAuthority> authorities) {
-		this.authorities = authorities;
-	}	
 
 }

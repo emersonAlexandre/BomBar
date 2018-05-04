@@ -39,11 +39,9 @@ public class UsuarioDao implements UserDetailsService, IUsuarioDao{
 	@Override
 	public void salvar(Usuario usuario) {
 		
-		System.out.println(usuario.isEnabled());
-
 		jdbcTemplate.update(
-				"INSERT INTO usuario (nome, login, senha, ativo, grupo) VALUES (?, ?, ?, ?, ?)",
-				usuario.getNome(), usuario.getUsername(), new BCryptPasswordEncoder().encode(usuario.getPassword()), usuario.isEnabled(), usuario.getGrupo().toString());
+				"INSERT INTO usuario (nome, login, senha, ativo) VALUES (?, ?, ?, ?)",
+				usuario.getNome(), usuario.getUsername(), new BCryptPasswordEncoder().encode(usuario.getPassword()), usuario.isEnabled());
 		
 		Usuario user_saved = new Usuario();
 		
@@ -53,7 +51,7 @@ public class UsuarioDao implements UserDetailsService, IUsuarioDao{
 			e.printStackTrace();
 		}
 		
-		if(user_saved.getGrupo().equals(Grupo.ADMIN)) {
+		if(usuario.getGrupo().equals(Grupo.ADMIN)) {
 			atribuirPermissao(user_saved, PG_BUSCA_BARES, jdbcTemplate);
 			atribuirPermissao(user_saved, PG_BARES, jdbcTemplate);
 		}
@@ -66,8 +64,8 @@ public class UsuarioDao implements UserDetailsService, IUsuarioDao{
 	@Override
 	public void atualizar(Usuario usuario) {
 
-		jdbcTemplate.update("UPDATE usuario SET nome = ?, login = ?, senha = ?, ativo = ?, grupo = ? WHERE id = ?", usuario.getNome(), usuario.getUsername(), usuario.getPassword(), usuario.isEnabled(), 
-				usuario.getGrupo().toString());
+		jdbcTemplate.update("UPDATE usuario SET nome = ?, login = ?, senha = ?, ativo = ? WHERE id = ?", usuario.getNome(), 
+				usuario.getUsername(), usuario.getPassword(), usuario.isEnabled());
 	}
 
 	@Override
@@ -79,7 +77,7 @@ public class UsuarioDao implements UserDetailsService, IUsuarioDao{
 	 * Método responsável por criar e retornar um objeto do tipo Usuario, a partir de um ResultSet que é passado por parâmetro
 	 */
 	public Usuario montarObjeto(ResultSet rs) throws SQLException {
-		return new Usuario(rs.getLong("id"), rs.getString("nome"), rs.getString("login"), rs.getString("senha"), rs.getBoolean("ativo"), Grupo.valueOf(rs.getString("grupo")));
+		return new Usuario(rs.getLong("id"), rs.getString("nome"), rs.getString("login"), rs.getString("senha"), rs.getBoolean("ativo"));
 	}
 
 	@Override

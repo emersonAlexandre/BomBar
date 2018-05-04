@@ -18,6 +18,7 @@ public class UsuarioService {
 	UsuarioDao usuarioDao;
 
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException, SQLException {
+		System.out.println(usuarioDao.loadUserByUsername(login));
 		return usuarioDao.loadUserByUsername(login);
 	}
 

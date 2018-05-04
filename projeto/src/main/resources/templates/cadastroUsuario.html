@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" th:href="@{/css/vendors.css}" />
 <link rel="stylesheet" type="text/css" th:href="@{/css/algaworks.css}" />
 <link rel="stylesheet" type="text/css" th:href="@{/css/application.css}" />
+<link rel="canonical" th:href="@{http://www.bootstraptoggle.com}"/>
+<link rel="stylesheet" type="text/css" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-toggle.css}" />
 
 </head>
 <body class="aw-layout-simple-page" style="background-color: #000000;">
@@ -48,31 +51,30 @@
 						</select><span th:if="${#fields.hasErrors('grupo')}" class="help-block">Informe o seu grupo</span>
 					</div>
 
-					<div class="form-group  has-feedback" th:classappend="${#fields.hasErrors('username')} ? has-error">
-						<input id="username" type="email" class="form-control  input-lg"
-							placeholder="Seu e-mail" name="username" th:field="*{username}" /> <span
-							th:if="${#fields.hasErrors('username')}" class="help-block">Informe seu e-mail</span>
+					<div class="form-group  has-feedback" th:classappend="${#fields.hasErrors('login')} ? has-error">
+						<input id="login" type="email" class="form-control  input-lg"
+							placeholder="Seu e-mail" name="login" th:field="*{login}" /> <span
+							th:if="${#fields.hasErrors('login')}" class="help-block">Informe seu e-mail</span>
 					</div>
 
-					<div class="form-group  has-feedback" th:classappend="${#fields.hasErrors('password')} ? has-error">
-						<input id="password" type="password" class="form-control  input-lg"
-							placeholder="Sua senha" name="password" th:field="*{password}" /> <span
-							th:if="${#fields.hasErrors('password')}" class="help-block">Informe sua senha</span>
+					<div class="form-group  has-feedback" th:classappend="${#fields.hasErrors('senha')} ? has-error">
+						<input id="senha" type="password" class="form-control  input-lg"
+							placeholder="Sua senha" name="senha" th:field="*{senha}" /> <span
+							th:if="${#fields.hasErrors('senha')}" class="help-block">Informe sua senha</span>
 					</div>
 					
 					<div class="form-group has-feedback row">
 						<div class="col-sm-2">
-							<label style="margin-top: 12px; margin-left: 2px" for="enabled">Ativo?</label>
+							<label style="margin-top: 12px; margin-left: 2px" for="ativo">Ativo?</label>
 						</div>
   					 	<div class="col-sm-3">
 	  						<label class="switch" style="margin-top: 5px">
-	  							<input id="enabled" type="checkbox" th:checked="${enabled}"/>
-	  							<span class="slider round"></span>
+	  							<input id="ativo" type="checkbox" data-on="Sim" data-off="Não" data-style="ios" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" th:field="*{ativo}"/>
 							</label>
   						</div>
 					</div>
 					
-					<div class="row">
+					<div class="form-group has-feedback row">
 						<div class="col-sm-6">
 							<a href="/login" class="btn btn-primary btn-lg aw-btn-full-width">Cancelar</a>
 						</div>
@@ -91,5 +93,8 @@
 	</div>
 	<script th:src="@{/js/template/vendors.js}"></script>
 	<script th:src="@{/js/template/bombar.js}"></script>
+	<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js}"></script>
+	<script th:src="@{/js/script.js}"></script>
+	<script th:src="@{/js/bootstrap-toggle.js}"></script>
 </body>
 </html>

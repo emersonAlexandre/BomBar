@@ -13,4 +13,8 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder(); 
 	}
 	
+//	public static void main(String[] args) {
+//		System.out.println(new BCryptPasswordEncoder().matches("123", "$2a$10$lQvk3DnF0TflMmo78EPuOOYGJajzTzW7ufOpaUNM8.Qez3duvMdRm"));
+//	}
+	
 }
