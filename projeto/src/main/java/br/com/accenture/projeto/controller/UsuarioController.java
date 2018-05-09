@@ -41,9 +41,6 @@ public class UsuarioController {
 	@RequestMapping(value = {"/cadastroUsuario"}, method = RequestMethod.POST)
 	public ModelAndView salvar(@Valid Usuario usuario, BindingResult result, Model model, RedirectAttributes attributes) {
 
-		/**
-		 * Verifica se existe algum erro com as informações(campos da página HTML) recebidas da view
-		 */
 		if (result.hasErrors()) {
 			model.addAttribute(usuario);
 			return novo(usuario);

@@ -6,8 +6,8 @@ import br.com.accenture.projeto.model.Usuario;
 
 public class JdbcUtils {
 	
-	public static final long PG_BUSCA_BARES = 1;
-	public static final long PG_BARES = 2;
+	public static final long PG_BARES = 1;
+	public static final long PG_BUSCA_BARES = 2;
 	
 	public static final String USUARIO_POR_LOGIN = "SELECT * FROM usuario"
 			+ " WHERE login = '";

@@ -26,6 +26,12 @@
 				</div>
 
 				<div class="aw-simple-panel__box">
+					<div class="alert alert-dismissible fade in"
+						th:if="${!#strings.isEmpty(mensagem)}"
+						th:classappend="${#strings.containsIgnoreCase(mensagem, 'erro') ? 'alert-danger' : 'alert-success'}">
+						<a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong th:text="${#strings.replace(mensagem, 'Erro! ', '')}"></strong>
+					</div>
 					<div th:if="${param.success}">
 						<div class="alert alert-success">Usuário salvo com sucesso!</div>
 					</div>
